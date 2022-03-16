@@ -19,7 +19,7 @@ public class CopyFromLocalConfig extends CommonConfig {
     public void setIgnoreEmptyFile(boolean ignoreEmptyFile) {
         this.ignoreEmptyFile = ignoreEmptyFile;
     }
-    
+
     public void setIgnoreSuffix(String ignore) {
         ignore = ignore.trim();
         String[] ignoreArray = ignore.split(";");
@@ -27,28 +27,28 @@ public class CopyFromLocalConfig extends CommonConfig {
             this.ignoreSuffixs.add(ignoreElement);
         }
     }
-    
+
     public String needToMigrate(Path file, String localPath) {
         if (isExcludes(localPath)) {
             return "excludes";
         }
-        
-        for (String suffix:ignoreSuffixs) {
-            if(localPath.endsWith(suffix)) {
+
+        for (String suffix : ignoreSuffixs) {
+            if (localPath.endsWith(suffix)) {
                 return "suffix";
             }
         }
-        
+
         if (ignoreEmptyFile) {
             File localFile = new File(file.toString());
             if (localFile.length() == 0) {
                 return "empty file";
             }
         }
-        
+
         return "";
     }
-    
+
     public String getLocalPath() {
         return localPath;
     }
@@ -74,9 +74,9 @@ public class CopyFromLocalConfig extends CommonConfig {
     }
 
     public boolean isExcludes(String excludePath) {
-        return this.excludes.contains(excludePath);
+        return this.excludes.contains(excludePath) || excludePath.contains(".svn");
     }
-    
+
     public void setIgnoreModifiedTimeLessThan(String ignoreModifiedTimeLessThanStr) {
         try {
             long number = Long.valueOf(ignoreModifiedTimeLessThanStr);
@@ -92,6 +92,7 @@ public class CopyFromLocalConfig extends CommonConfig {
     public long getIgnoreModifiedTimeLessThan() {
         return ignoreModifiedTimeLessThan;
     }
+
     public boolean isFileListMode() {
         return fileListMode;
     }
